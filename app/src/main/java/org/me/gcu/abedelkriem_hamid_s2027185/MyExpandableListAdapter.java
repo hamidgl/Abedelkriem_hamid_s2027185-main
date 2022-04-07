@@ -56,11 +56,17 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         TextView itemDescription = (TextView) convertView.findViewById(R.id.itemDescription);
         TextView itemPubDate = (TextView) convertView.findViewById(R.id.itemPubDate);
 
-        itemTitle.setTypeface(null, Typeface.BOLD);
+        itemTitle.setPadding(10, 0, 10, 0);
+        itemDescription.setPadding(20, 20, 20, 20);
+        itemPubDate.setPadding(20, 0, 20, 0);
 
         itemTitle.setText( "Title:" + item.getTitle() );
         itemDescription.setText("Description:\n" + item.getDescription());
         itemPubDate.setText( "Pub Date: " + item.getPubDate() );
+
+        itemTitle.setTextSize(20);
+        itemDescription.setTextSize(18);
+        itemPubDate.setTextSize(18);
 
         return convertView;
     }
