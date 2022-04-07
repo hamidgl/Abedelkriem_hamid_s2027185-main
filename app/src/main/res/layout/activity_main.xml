@@ -10,14 +10,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            tools:ignore="MissingConstraints">
-
-                    <TextView
-                        android:id="@+id/pageTitle"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Google Map"
-                        android:textSize="20sp" />
+            tools:ignore="MissingConstraints"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            >
 
                     <Button
                         android:id="@+id/displayAllButton"
