@@ -18,6 +18,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     public static final String urlString = "https://trafficscotland.org/rss/feeds/roadworks.aspx";
     public static final String planningJourneyUrl = "https://trafficscotland.org/rss/feeds/plannedroadworks.aspx";
+    public static final String currentIncidentUrl  = "https://trafficscotland.org/rss/feeds/currentincidents.aspx";
 
     private Button displayAllButton;
 
@@ -36,15 +37,20 @@ public class MainActivity extends AppCompatActivity {
     private EditText planningJourneyDateInput;
     private Button planningJourneyDateButton;
 
+    private Button currentIncidentButton;
+
     private Channel channel;
     private Channel planningJourneyChannel;
+
+    private Channel currentIncidentChannel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //initialise the Date
+        //call initialise the Date
         init();
 
         //
@@ -73,16 +79,21 @@ public class MainActivity extends AppCompatActivity {
         planningJourneyDateInput = (EditText) findViewById(R.id.planningJourneyDateInput);
         planningJourneyDateButton = (Button) findViewById(R.id.planningJourneyDateButton);
         planningJourneyDateButton.setOnClickListener(this::planningJourneyByDate);
+
+        currentIncidentButton = (Button) findViewById(R.id.currentIncidentButton);
+        currentIncidentButton.setOnClickListener(this::displayCurrentIncident);
     }
 
     private void init() {
-        //init
+        //init stages
         channel = new Channel();
         planningJourneyChannel = new Channel();
+        currentIncidentChannel = new Channel();
         //read the data from the server and parse
         try {
             showMessage("please wait while we reading data ..");
             new Thread(new GetData()).start();
+            new Thread(new GetCurrentIncidentData()).start();
         } catch (Exception ex) {
             System.err.println("***Exception: " + ex.toString());
         }
@@ -161,6 +172,37 @@ public class MainActivity extends AppCompatActivity {
         }
 
         updateItemList(list);
+    }
+
+    public void displayCurrentIncident(View v) {
+        if (currentIncidentChannel == null) {
+            new Thread(new GetCurrentIncidentData()).start();
+        }
+
+        //clear
+        clear();
+
+        display(currentIncidentChannel);
+
+        // Extract the specified range of elements from the original list and store them into the sublist
+        List<Item> subList = currentIncidentChannel.getItems();
+
+        updateItemList(subList);
+    }
+
+    private class GetCurrentIncidentData implements Runnable {
+
+        @Override
+        public void run() {
+
+            try {
+                RoadWorksParser parser = new RoadWorksParser();
+                currentIncidentChannel = parser.parse(currentIncidentUrl);
+            } catch (Exception e) {
+                System.out.println("XML Pasing Exception = " + e);
+                showMessage("*Error while Parsing Data: " + e.getMessage());
+            }
+        }
     }
 
 
