@@ -64,9 +64,9 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         itemDescription.setText("Description:\n" + item.getDescription());
         itemPubDate.setText( "Pub Date: " + item.getPubDate() );
 
-        itemTitle.setTextSize(20);
-        itemDescription.setTextSize(18);
-        itemPubDate.setTextSize(18);
+        itemTitle.setTextSize(22);
+        itemDescription.setTextSize(20);
+        itemPubDate.setTextSize(20);
 
         return convertView;
     }
